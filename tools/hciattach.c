@@ -274,6 +274,14 @@ static int sprd(int fd, struct uart_t *u, struct termios *ti)
 	return sprd_init(fd, ti);
 }
 
+static int xradio(int fd, struct uart_t *u, struct termios *ti)
+{
+	fprintf(stderr, "XRADIO Bluetooth init uart with init speed:%d,"
+					" final_speed:%d, type:HCI UART %s\n",
+					u->init_speed, u->speed, (u->proto == HCI_UART_H4) ? "H4" : "H5");
+	return xr_init(fd, u->init_speed, u->speed, ti);
+}
+
 static int read_check(int fd, void *buf, int count)
 {
 	int res;
@@ -1108,6 +1116,10 @@ struct uart_t uart[] = {
 	/* SPRD (UWE5622) UART */
 	{ "sprd", 0x0000, 0x0000, 0, 115200, 1500000,
 		FLOW_CTL, DISABLE_PM, NULL, sprd, NULL },
+
+	/* XRadio (XR829) UART */
+	{ "xradio", 0x0000, 0x0000, HCI_UART_H4, 115200, 1500000,
+		0, DISABLE_PM, NULL, xradio, NULL },
 
 	{ NULL, 0 }
 };

@@ -701,6 +701,7 @@ LOCAL_SRC_FILES := \
 	bluez/tools/hciattach_intel.c \
 	bluez/tools/hciattach_bcm43xx.c \
 	bluez/tools/hciattach_sprd.c \
+	bluez/tools/hciattach_xr.c \
 	bluez/lib/bluetooth.c \
 	bluez/lib/hci.c \
 
