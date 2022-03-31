@@ -282,6 +282,20 @@ static int xradio(int fd, struct uart_t *u, struct termios *ti)
 	return xr_init(fd, u->init_speed, u->speed, ti);
 }
 
+static int realtek(int fd, struct uart_t *u, struct termios *ti)
+{
+	fprintf(stderr, "Realtek Bluetooth init uart with init speed:%d,"
+					" final_speed:%d, type:HCI UART %s\n",
+					u->init_speed, u->speed, (u->proto == HCI_UART_H4) ? "H4" : "H5" );
+	return rtk_init(fd, u->proto, u->speed, ti);
+}
+
+static int realtek2(int fd, struct uart_t *u, struct termios *ti)
+{
+	fprintf(stderr, "Realtek Bluetooth post process\n");
+	return rtk_post(fd, u->proto, ti);
+}
+
 static int read_check(int fd, void *buf, int count)
 {
 	int res;
@@ -1120,6 +1134,14 @@ struct uart_t uart[] = {
 	/* XRadio (XR829) UART */
 	{ "xradio", 0x0000, 0x0000, HCI_UART_H4, 115200, 1500000,
 		0, DISABLE_PM, NULL, xradio, NULL },
+
+	/* Realtek Bluetooth H4 */
+	{ "rtk_h4", 0x0000, 0x0000, HCI_UART_H4, 115200,  115200,
+		FLOW_CTL, DISABLE_PM, NULL, realtek, realtek2 },
+
+	/* Realtek Bluetooth H5 */
+	{ "rtk_h5", 0x0000, 0x0000, HCI_UART_3WIRE, 115200,115200,
+		0, DISABLE_PM, NULL, realtek, realtek2 },
 
 	{ NULL, 0 }
 };
